@@ -8,7 +8,8 @@ namespace RobotCleaner.App.Domain
     {
         public static ((int x, int y), IReadOnlyCollection<(int x, int y)>) Execute((int x, int y) startingPosition,
             string direction,
-            int steps)
+            int steps,
+            int positionLimit)
         {
             var (fromX, fromY) = startingPosition;
 
@@ -24,8 +25,19 @@ namespace RobotCleaner.App.Domain
             if (createPosition == null)
                 return (startingPosition, new List<(int x, int y)>());
 
+            var maxRange = direction switch
+            {
+                Directions.East => positionLimit - fromX,
+                Directions.West => positionLimit + fromX,
+                Directions.North => positionLimit - fromY,
+                Directions.South => positionLimit + fromY,
+                _ => 0
+            };
+
+            var maxSteps = Math.Min(steps, maxRange);
+            
             var positions = Enumerable
-                .Range(0, steps + 1)
+                .Range(0, maxSteps + 1)
                 .Select(createPosition)
                 .ToList();
 

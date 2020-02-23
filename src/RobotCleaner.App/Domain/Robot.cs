@@ -6,7 +6,8 @@ namespace RobotCleaner.App.Domain
 {
     public class Robot
     {
-        public static IEnumerable<(int x, int y)> Clean((int, int) startingPosition,
+        public static IEnumerable<(int x, int y)> Clean(int spaceSize,
+            (int, int) startingPosition,
             IEnumerable<(string direction, int steps)> commands)
         {
             var position = startingPosition;
@@ -17,7 +18,8 @@ namespace RobotCleaner.App.Domain
                     var (direction, steps) = command;
                     var (lastPosition, positions) = Command.Execute(position,
                         direction,
-                        steps);
+                        steps,
+                        spaceSize);
                     position = lastPosition;
                     return positions;
                 })
