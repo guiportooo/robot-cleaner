@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using RobotCleaner.App.Domain.Commands;
 
 namespace RobotCleaner.App.Domain
 {
@@ -9,39 +8,14 @@ namespace RobotCleaner.App.Domain
         public static ((int x, int y), IReadOnlyCollection<(int x, int y)>) Execute((int x, int y) startingPosition,
             string direction,
             int steps,
-            int positionLimit)
-        {
-            var (fromX, fromY) = startingPosition;
-
-            Func<int, (int x, int y)> createPosition = direction switch
+            int positionLimit) 
+            => (direction switch
             {
-                Directions.East => x => (fromX + x, fromY),
-                Directions.West => x => (fromX - x, fromY),
-                Directions.North => y => (fromX, fromY + y),
-                Directions.South => y => (fromX, fromY - y),
+                Directions.East => (UnidirectionalCommand) new EastCommand(startingPosition, positionLimit),
+                Directions.West => new WestCommand(startingPosition, positionLimit),
+                Directions.North => new NorthCommand(startingPosition, positionLimit),
+                Directions.South => new SouthCommand(startingPosition, positionLimit),
                 _ => null
-            };
-
-            if (createPosition == null)
-                return (startingPosition, new List<(int x, int y)>());
-
-            var maxRange = direction switch
-            {
-                Directions.East => positionLimit - fromX,
-                Directions.West => positionLimit + fromX,
-                Directions.North => positionLimit - fromY,
-                Directions.South => positionLimit + fromY,
-                _ => 0
-            };
-
-            var maxSteps = Math.Min(steps, maxRange);
-            
-            var positions = Enumerable
-                .Range(0, maxSteps + 1)
-                .Select(createPosition)
-                .ToList();
-
-            return (positions.Last(), positions);
-        }
+            })?.Execute(steps) ?? (startingPosition, new List<(int x, int y)>());
     }
 }
