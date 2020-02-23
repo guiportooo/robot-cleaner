@@ -120,5 +120,40 @@ namespace RobotCleaner.UnitTests.Domain
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }
+
+        [Test]
+        public void ShouldCleanUniqueSpaces()
+        {
+             var startingPosition = (2, -3);
+             var normalCommands = new (string direction, int steps)[]
+             {
+                 ("E", 2),
+                 ("N", 3),
+                 ("W", 2),
+                 ("S", 1)
+             };
+
+             var reversedCommands = new (string direction, int steps)[]
+             {
+                 ("N", 1),
+                 ("E", 2),
+                 ("S", 3),
+                 ("W", 2)
+             };
+
+             var commands = normalCommands.Concat(reversedCommands);
+ 
+             var cleanedSpaces = Robot.Clean(startingPosition, commands);
+ 
+             var expected = new List<(int x, int y)>
+             {
+                 (2, -3), (3, -3), (4, -3),
+                 (4, -2), (4, -1), (4, 0),
+                 (3, 0), (2, 0),
+                 (2, -1)
+             };
+ 
+             cleanedSpaces.Should().BeEquivalentTo(expected);           
+        }
     }
 }
