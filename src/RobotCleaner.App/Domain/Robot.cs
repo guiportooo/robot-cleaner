@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,37 +10,21 @@ namespace RobotCleaner.App.Domain
             string direction,
             int steps)
         {
-            switch (direction)
+            var (fromX, fromY) = startingPosition;
+
+            Func<int, (int x, int y)> createPosition = direction switch
             {
-                case "E":
-                {
-                    var (from, y) = startingPosition;
-                    return Enumerable
-                        .Range(0, steps + 1)
-                        .Select(x => (from + x, y));
-                }
-                case "W":
-                {
-                    var (from, y) = startingPosition;
-                    return Enumerable
-                        .Range(0, steps + 1)
-                        .Select(x => (from - x, y));
-                }
-                case "N":
-                {
-                    var (x, from) = startingPosition;
-                    return Enumerable
-                        .Range(0, steps + 1)
-                        .Select(y => (x, from + y));
-                }
-                case "S":
-                {
-                    var (x, from) = startingPosition;
-                    return Enumerable
-                        .Range(0, steps + 1)
-                        .Select(y => (x, from - y));
-                }
-            }
+                Directions.East => x => (fromX + x, fromY),
+                Directions.West => x => (fromX - x, fromY),
+                Directions.North => y => (fromX, fromY + y),
+                Directions.South => y => (fromX, fromY - y),
+                _ => null
+            };
+
+            if (createPosition != null)
+                return Enumerable
+                    .Range(0, steps + 1)
+                    .Select(createPosition);
 
             return new List<(int x, int y)>();
         }
