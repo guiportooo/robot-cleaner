@@ -8,32 +8,18 @@ namespace RobotCleaner.App.Domain
     {
         public static IEnumerable<(int x, int y)> Clean((int, int) startingPosition,
             IEnumerable<(string direction, int steps)> commands)
-        { 
+        {
+            var position = startingPosition;
+
             return commands
                 .SelectMany(command =>
                 {
                     var (direction, steps) = command;
-                    var (fromX, fromY) = startingPosition;
-
-                    Func<int, (int x, int y)> createPosition = direction switch
-                    {
-                        Directions.East => x => (fromX + x, fromY),
-                        Directions.West => x => (fromX - x, fromY),
-                        Directions.North => y => (fromX, fromY + y),
-                        Directions.South => y => (fromX, fromY - y),
-                        _ => null
-                    };
-
-                    if (createPosition == null) 
-                        return new List<(int x, int y)>();
-                    
-                    var cleanedSpaces = Enumerable
-                        .Range(0, steps + 1)
-                        .Select(createPosition)
-                        .ToList();
-
-                    startingPosition = cleanedSpaces.Last();
-                    return cleanedSpaces;
+                    var (lastPosition, positions) = Command.Execute(position,
+                        direction,
+                        steps);
+                    position = lastPosition;
+                    return positions;
                 })
                 .Distinct();
         }
