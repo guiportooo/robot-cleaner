@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using NUnit.Framework;
 using RobotCleaner.App.Domain;
 
@@ -17,7 +15,7 @@ namespace RobotCleaner.UnitTests.Domain
             var startingPosition = (2, -3);
             var commands = new (string direction, int steps)[] {("Unknown", 100)};
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)>();
 
@@ -31,7 +29,7 @@ namespace RobotCleaner.UnitTests.Domain
             var startingPosition = (2, -3);
             var commands = new (string direction, int steps)[] {("E", 3)};
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)> {(2, -3), (3, -3), (4, -3), (5, -3)};
 
@@ -45,7 +43,7 @@ namespace RobotCleaner.UnitTests.Domain
             var startingPosition = (2, -3);
             var commands = new (string direction, int steps)[] {("W", 3)};
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)> {(2, -3), (1, -3), (0, -3), (-1, -3)};
 
@@ -59,7 +57,7 @@ namespace RobotCleaner.UnitTests.Domain
             var startingPosition = (2, -3);
             var commands = new (string direction, int steps)[] {("N", 3)};
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)> {(2, -3), (2, -2), (2, -1), (2, 0)};
 
@@ -73,7 +71,7 @@ namespace RobotCleaner.UnitTests.Domain
             var startingPosition = (2, -3);
             var commands = new (string direction, int steps)[] {("S", 3)};
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)> {(2, -3), (2, -4), (2, -5), (2, -6)};
 
@@ -92,7 +90,7 @@ namespace RobotCleaner.UnitTests.Domain
                 ("E", 1)
             };
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)>
             {
@@ -117,7 +115,7 @@ namespace RobotCleaner.UnitTests.Domain
                 ("S", 1),
             };
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)>
             {
@@ -153,7 +151,7 @@ namespace RobotCleaner.UnitTests.Domain
 
             var commands = normalCommands.Concat(reversedCommands);
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)>
             {
@@ -179,7 +177,7 @@ namespace RobotCleaner.UnitTests.Domain
                 ("N", 100000)
             };
 
-            var cleanedSpaces = Robot.Clean(spaceSize, startingPosition, commands);
+            var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<(int x, int y)>
             {

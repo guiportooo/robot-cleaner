@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,24 +5,31 @@ namespace RobotCleaner.App.Domain
 {
     public class Robot
     {
-        public static IEnumerable<(int x, int y)> Clean(int spaceSize,
-            (int, int) startingPosition,
+        public Robot(int spaceSize,
+            (int x, int y) startingPosition,
             IEnumerable<(string direction, int steps)> commands)
         {
-            var position = startingPosition;
+            _spaceSize = spaceSize;
+            _position = startingPosition;
+            _commands = commands;
+        }
 
-            return commands
+        private readonly int _spaceSize;
+        private (int x, int y) _position; 
+        private readonly IEnumerable<(string direction, int steps)> _commands;
+
+        public IEnumerable<(int x, int y)> Clean()
+            => _commands
                 .SelectMany(command =>
                 {
                     var (direction, steps) = command;
-                    var (lastPosition, positions) = Command.Execute(position,
+                    var (lastPosition, positions) = Command.Execute(_position,
                         direction,
                         steps,
-                        spaceSize);
-                    position = lastPosition;
+                        _spaceSize);
+                    _position = lastPosition;
                     return positions;
                 })
                 .Distinct();
-        }
     }
 }
