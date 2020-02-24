@@ -1,33 +1,30 @@
 using System.Collections.Generic;
 using System.Linq;
+using RobotCleaner.App.Domain.Commands;
 
 namespace RobotCleaner.App.Domain
 {
     public class Robot
     {
-        private readonly int _spaceSize;
-        private Position _position;
-        private readonly IEnumerable<(string direction, int steps)> _commands;
+        public int SpaceSize { get; }
+        public Position Position { get; private set; }
+        public IReadOnlyCollection<ICommand> Commands { get; }
 
         public Robot(int spaceSize,
             Position startingPosition,
-            IEnumerable<(string direction, int steps)> commands)
+            IEnumerable<ICommand> commands)
         {
-            _spaceSize = spaceSize;
-            _position = startingPosition;
-            _commands = commands;
+            SpaceSize = spaceSize;
+            Position = startingPosition;
+            Commands = commands.ToList();
         }
 
         public IEnumerable<Position> Clean()
-            => _commands
+            => Commands
                 .SelectMany(command =>
                 {
-                    var (direction, steps) = command;
-                    var (lastPosition, positions) = Command.Execute(_position,
-                        direction,
-                        steps,
-                        _spaceSize);
-                    _position = lastPosition;
+                    var (lastPosition, positions) = command.Execute(Position, SpaceSize);
+                    Position = lastPosition;
                     return positions;
                 })
                 .Distinct();

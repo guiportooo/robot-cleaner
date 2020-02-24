@@ -15,8 +15,8 @@ namespace RobotCleaner.UnitTests.Domain.Commands
             const int steps = 3;
             const int positionLimit = 10;
 
-            var command = new EastCommand(startingPosition, positionLimit);
-            var (lastPosition, positions) = command.Execute(steps);
+            var command = new EastCommand(steps);
+            var (lastPosition, positions) = command.Execute(startingPosition, positionLimit);
 
             var expectedLastPosition = new Position(5, -3);
             var expectedPositions = new List<Position>
@@ -38,8 +38,8 @@ namespace RobotCleaner.UnitTests.Domain.Commands
             const int steps = 5;
             const int positionLimit = 4;
 
-            var command = new EastCommand(startingPosition, positionLimit);
-            var (lastPosition, positions) = command.Execute(steps);
+            var command = new EastCommand(steps);
+            var (lastPosition, positions) = command.Execute(startingPosition, positionLimit);
             
             var expectedLastPosition = new Position(4, 0);
             var expectedPositions = new List<Position>
@@ -60,8 +60,8 @@ namespace RobotCleaner.UnitTests.Domain.Commands
             const int steps = 5;
             const int positionLimit = 2;
 
-            var command = new EastCommand(startingPosition, positionLimit);
-            var (lastPosition, positions) = command.Execute(steps);
+            var command = new EastCommand(steps);
+            var (lastPosition, positions) = command.Execute(startingPosition, positionLimit);
             
             var expectedLastPosition = new Position(2, 0);
             var expectedPositions = new List<Position>

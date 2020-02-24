@@ -3,21 +3,22 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using RobotCleaner.App.Domain;
+using RobotCleaner.App.Domain.Commands;
 
 namespace RobotCleaner.UnitTests.Domain
 {
     public class RobotTests
     {
         [Test]
-        public void ShouldNotCleanIfDirectionIsUnknown()
+        public void ShouldCleanOnlyStartingPositionCommandIsNull()
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var commands = new (string direction, int steps)[] {("Unknown", 100)};
+            var commands = new[] {new NullCommand(100)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<Position>();
+            var expected = new List<Position> {new Position(2, -3)};
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }
@@ -27,7 +28,7 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var commands = new (string direction, int steps)[] {("E", 3)};
+            var commands = new[] {new EastCommand(3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
@@ -47,15 +48,15 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var commands = new (string direction, int steps)[] {("W", 3)};
+            var commands = new[] {new WestCommand(3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<Position>
             {
-                new Position(2, -3), 
-                new Position(1, -3), 
-                new Position(0, -3), 
+                new Position(2, -3),
+                new Position(1, -3),
+                new Position(0, -3),
                 new Position(-1, -3)
             };
 
@@ -67,15 +68,15 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var commands = new (string direction, int steps)[] {("N", 3)};
+            var commands = new[] {new NorthCommand(3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<Position>
             {
-                new Position(2, -3), 
-                new Position(2, -2), 
-                new Position(2, -1), 
+                new Position(2, -3),
+                new Position(2, -2),
+                new Position(2, -1),
                 new Position(2, 0)
             };
 
@@ -87,15 +88,15 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var commands = new (string direction, int steps)[] {("S", 3)};
+            var commands = new[] {new SouthCommand(3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
             var expected = new List<Position>
             {
-                new Position(2, -3), 
-                new Position(2, -4), 
-                new Position(2, -5), 
+                new Position(2, -3),
+                new Position(2, -4),
+                new Position(2, -5),
                 new Position(2, -6)
             };
 
@@ -107,11 +108,11 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var commands = new (string direction, int steps)[]
+            var commands = new[]
             {
-                ("E", 2),
-                ("E", 3),
-                ("E", 1)
+                new EastCommand(2),
+                new EastCommand(3),
+                new EastCommand(1)
             };
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
@@ -131,12 +132,12 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var commands = new (string direction, int steps)[]
+            var commands = new List<ICommand>
             {
-                ("E", 2),
-                ("N", 3),
-                ("W", 2),
-                ("S", 1)
+                new EastCommand(2),
+                new NorthCommand(3),
+                new WestCommand(2),
+                new SouthCommand(1)
             };
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
@@ -157,20 +158,20 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 10;
             var startingPosition = new Position(2, -3);
-            var normalCommands = new (string direction, int steps)[]
+            var normalCommands = new List<ICommand> 
             {
-                ("E", 2),
-                ("N", 3),
-                ("W", 2),
-                ("S", 1)
+                new EastCommand(2),
+                new NorthCommand(3),
+                new WestCommand(2),
+                new SouthCommand(1)
             };
 
-            var reversedCommands = new (string direction, int steps)[]
+            var reversedCommands = new List<ICommand> 
             {
-                ("N", 1),
-                ("E", 2),
-                ("S", 3),
-                ("W", 2)
+                new NorthCommand(1),
+                new EastCommand(2),
+                new SouthCommand(3),
+                new WestCommand(2)
             };
 
             var commands = normalCommands.Concat(reversedCommands);
@@ -193,12 +194,12 @@ namespace RobotCleaner.UnitTests.Domain
         {
             const int spaceSize = 2;
             var startingPosition = new Position(-2, 2);
-            var commands = new (string direction, int steps)[]
+            var commands = new List<ICommand> 
             {
-                ("E", 5),
-                ("S", 6),
-                ("W", 100),
-                ("N", 100000)
+                new EastCommand(5),
+                new SouthCommand(6),
+                new WestCommand(100),
+                new NorthCommand(100000)
             };
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
@@ -211,12 +212,12 @@ namespace RobotCleaner.UnitTests.Domain
                 new Position(1, 2),
                 new Position(2, 2)
             };
-            
+
             var southPositions = new List<Position>
             {
-                new Position(2, 1), 
-                new Position(2, 0), 
-                new Position(2, -1), 
+                new Position(2, 1),
+                new Position(2, 0),
+                new Position(2, -1),
                 new Position(2, -2)
             };
 
@@ -230,8 +231,8 @@ namespace RobotCleaner.UnitTests.Domain
 
             var northPositions = new List<Position>
             {
-                new Position(-2, -1), 
-                new Position(-2, 0), 
+                new Position(-2, -1),
+                new Position(-2, 0),
                 new Position(-2, 1)
             };
 

@@ -2,10 +2,10 @@ using System;
 
 namespace RobotCleaner.App.Domain.Commands
 {
-    public class EastCommand : UnidirectionalCommand
+    public class EastCommand : Command
     {
-        public EastCommand(Position startingPosition, int positionLimit)
-            : base(startingPosition, positionLimit)
+        public EastCommand(int steps)
+            : base(steps)
         {
         }
 
