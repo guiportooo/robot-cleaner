@@ -19,15 +19,14 @@ namespace RobotCleaner.App.Domain.Commands
 
         protected abstract Func<int, (int x, int y)> CreatePosition();
 
-        public ((int x, int y) lastPosition, IReadOnlyCollection<(int x, int y)> positions) Execute(
-            int steps)
+        public CommandResult Execute(int steps)
         {
             var positions = Enumerable
                 .Range(0, CalculateSteps(steps))
                 .Select(CreatePosition())
                 .ToList();
 
-            return (positions.Last(), positions);
+            return new CommandResult(positions.Last(), positions);
         }
 
         private int CalculateSteps(int steps) => Math.Min(steps, MaxRange) + 1;
