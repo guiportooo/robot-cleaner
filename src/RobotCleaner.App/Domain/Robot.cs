@@ -5,6 +5,10 @@ namespace RobotCleaner.App.Domain
 {
     public class Robot
     {
+        private readonly int _spaceSize;
+        private (int x, int y) _position;
+        private readonly IEnumerable<(string direction, int steps)> _commands;
+
         public Robot(int spaceSize,
             (int x, int y) startingPosition,
             IEnumerable<(string direction, int steps)> commands)
@@ -13,10 +17,6 @@ namespace RobotCleaner.App.Domain
             _position = startingPosition;
             _commands = commands;
         }
-
-        private readonly int _spaceSize;
-        private (int x, int y) _position;
-        private readonly IEnumerable<(string direction, int steps)> _commands;
 
         public IEnumerable<(int x, int y)> Clean()
             => _commands
