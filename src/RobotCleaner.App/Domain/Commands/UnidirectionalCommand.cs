@@ -1,12 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RobotCleaner.App.Domain.Commands
 {
     public abstract class UnidirectionalCommand
     {
-        protected UnidirectionalCommand((int x, int y) startingPosition, int positionLimit)
+        protected UnidirectionalCommand(Position startingPosition, int positionLimit)
         {
             (StartX, StartY) = startingPosition;
             PositionLimit = positionLimit;
@@ -17,7 +16,7 @@ namespace RobotCleaner.App.Domain.Commands
         protected readonly int PositionLimit;
         protected abstract int MaxRange { get; }
 
-        protected abstract Func<int, (int x, int y)> CreatePosition();
+        protected abstract Func<int, Position> CreatePosition();
 
         public CommandResult Execute(int steps)
         {

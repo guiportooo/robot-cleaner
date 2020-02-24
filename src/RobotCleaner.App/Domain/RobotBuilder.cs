@@ -8,7 +8,7 @@ namespace RobotCleaner.App.Domain
     {
         private const int SpaceSize = 100000;
         private int _numberOfCommands;
-        private (int x, int y) _startingPosition;
+        private Position _startingPosition;
         private IEnumerable<(string direction, int steps)> _commands 
             = new List<(string direction, int steps)>();
 
@@ -24,7 +24,7 @@ namespace RobotCleaner.App.Domain
             var inputs = startingAtInput.Split(' ');
             int.TryParse(inputs[0], out var x);
             int.TryParse(inputs[1], out var y);
-            _startingPosition = (x, y);
+            _startingPosition = new Position(x, y);
             return this;
         }
 

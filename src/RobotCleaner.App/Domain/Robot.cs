@@ -6,11 +6,11 @@ namespace RobotCleaner.App.Domain
     public class Robot
     {
         private readonly int _spaceSize;
-        private (int x, int y) _position;
+        private Position _position;
         private readonly IEnumerable<(string direction, int steps)> _commands;
 
         public Robot(int spaceSize,
-            (int x, int y) startingPosition,
+            Position startingPosition,
             IEnumerable<(string direction, int steps)> commands)
         {
             _spaceSize = spaceSize;
@@ -18,7 +18,7 @@ namespace RobotCleaner.App.Domain
             _commands = commands;
         }
 
-        public IEnumerable<(int x, int y)> Clean()
+        public IEnumerable<Position> Clean()
             => _commands
                 .SelectMany(command =>
                 {

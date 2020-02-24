@@ -5,7 +5,7 @@ namespace RobotCleaner.App.Domain
 {
     public static class Command
     {
-        public static CommandResult Execute((int x, int y) startingPosition,
+        public static CommandResult Execute(Position startingPosition,
             string direction,
             int steps,
             int positionLimit)
@@ -20,7 +20,7 @@ namespace RobotCleaner.App.Domain
             };
 
             return command?.Execute(steps)
-                   ?? new CommandResult(startingPosition, new List<(int x, int y)>());
+                   ?? new CommandResult(startingPosition, new List<Position>());
         }
     }
 }

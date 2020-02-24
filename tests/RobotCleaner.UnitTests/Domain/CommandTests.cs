@@ -10,7 +10,7 @@ namespace RobotCleaner.UnitTests.Domain
         [Test]
         public void ShouldNotExecuteIfDirectionIsUnknown()
         {
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             const string direction = "Unknown";
             const int steps = 100;
             const int positionLimit = 10;
@@ -20,8 +20,8 @@ namespace RobotCleaner.UnitTests.Domain
                 steps,
                 positionLimit);
 
-            var expectedLastPosition = (2, -3);
-            var expectedPositions = new List<(int x, int y)>();
+            var expectedLastPosition = new Position(2, -3);
+            var expectedPositions = new List<Position>();
 
             lastPosition.Should().Be(expectedLastPosition);
             positions.Should().BeEquivalentTo(expectedPositions);
@@ -30,7 +30,7 @@ namespace RobotCleaner.UnitTests.Domain
         [Test]
         public void ShouldExecuteOnEastDirection()
         {
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             const string direction = "E";
             const int steps = 3;
             const int positionLimit = 10;
@@ -40,8 +40,14 @@ namespace RobotCleaner.UnitTests.Domain
                 steps,
                 positionLimit);
 
-            var expectedLastPosition = (5, -3);
-            var expectedPositions = new List<(int x, int y)> {(2, -3), (3, -3), (4, -3), (5, -3)};
+            var expectedLastPosition = new Position(5, -3);
+            var expectedPositions = new List<Position>
+            {
+                new Position(2, -3), 
+                new Position(3, -3), 
+                new Position(4, -3), 
+                new Position(5, -3)
+            };
 
             lastPosition.Should().Be(expectedLastPosition);
             positions.Should().BeEquivalentTo(expectedPositions);
@@ -50,7 +56,7 @@ namespace RobotCleaner.UnitTests.Domain
         [Test]
         public void ShouldExecuteOnWestDirection()
         {
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             const string direction = "W";
             const int steps = 3;
             const int positionLimit = 10;
@@ -60,8 +66,14 @@ namespace RobotCleaner.UnitTests.Domain
                 steps,
                 positionLimit);
 
-            var expectedLastPosition = (-1, -3);
-            var expectedPositions = new List<(int x, int y)> {(2, -3), (1, -3), (0, -3), (-1, -3)};
+            var expectedLastPosition = new Position(-1, -3);
+            var expectedPositions = new List<Position>
+            {
+                new Position(2, -3), 
+                new Position(1, -3), 
+                new Position(0, -3), 
+                new Position(-1, -3)
+            };
 
             lastPosition.Should().Be(expectedLastPosition);
             positions.Should().BeEquivalentTo(expectedPositions);
@@ -70,7 +82,7 @@ namespace RobotCleaner.UnitTests.Domain
         [Test]
         public void ShouldExecuteOnNorthDirection()
         {
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             const string direction = "N";
             const int steps = 3;
             const int positionLimit = 10;
@@ -80,8 +92,14 @@ namespace RobotCleaner.UnitTests.Domain
                 steps,
                 positionLimit);
 
-            var expectedLastPosition = (2, 0);
-            var expectedPositions = new List<(int x, int y)> {(2, -3), (2, -2), (2, -1), (2, 0)};
+            var expectedLastPosition = new Position(2, 0);
+            var expectedPositions = new List<Position>
+            {
+                new Position(2, -3), 
+                new Position(2, -2), 
+                new Position(2, -1), 
+                new Position(2, 0)
+            };
 
             lastPosition.Should().Be(expectedLastPosition);
             positions.Should().BeEquivalentTo(expectedPositions);
@@ -90,7 +108,7 @@ namespace RobotCleaner.UnitTests.Domain
         [Test]
         public void ShouldExecuteOnSouthDirection()
         {
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             const string direction = "S";
             const int steps = 3;
             const int positionLimit = 10;
@@ -100,8 +118,14 @@ namespace RobotCleaner.UnitTests.Domain
                 steps,
                 positionLimit);
 
-            var expectedLastPosition = (2, -6);
-            var expectedPositions = new List<(int x, int y)> {(2, -3), (2, -4), (2, -5), (2, -6)};
+            var expectedLastPosition = new Position(2, -6);
+            var expectedPositions = new List<Position>
+            {
+                new Position(2, -3), 
+                new Position(2, -4), 
+                new Position(2, -5), 
+                new Position(2, -6)
+            };
 
             lastPosition.Should().Be(expectedLastPosition);
             positions.Should().BeEquivalentTo(expectedPositions);

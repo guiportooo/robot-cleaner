@@ -12,12 +12,12 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldNotCleanIfDirectionIsUnknown()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var commands = new (string direction, int steps)[] {("Unknown", 100)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)>();
+            var expected = new List<Position>();
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }
@@ -26,12 +26,18 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldCleanOnEastDirection()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var commands = new (string direction, int steps)[] {("E", 3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)> {(2, -3), (3, -3), (4, -3), (5, -3)};
+            var expected = new List<Position>
+            {
+                new Position(2, -3),
+                new Position(3, -3),
+                new Position(4, -3),
+                new Position(5, -3)
+            };
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }
@@ -40,12 +46,18 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldCleanOnWestDirection()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var commands = new (string direction, int steps)[] {("W", 3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)> {(2, -3), (1, -3), (0, -3), (-1, -3)};
+            var expected = new List<Position>
+            {
+                new Position(2, -3), 
+                new Position(1, -3), 
+                new Position(0, -3), 
+                new Position(-1, -3)
+            };
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }
@@ -54,12 +66,18 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldCleanOnNorthDirection()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var commands = new (string direction, int steps)[] {("N", 3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)> {(2, -3), (2, -2), (2, -1), (2, 0)};
+            var expected = new List<Position>
+            {
+                new Position(2, -3), 
+                new Position(2, -2), 
+                new Position(2, -1), 
+                new Position(2, 0)
+            };
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }
@@ -68,12 +86,18 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldCleanOnSouthDirection()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var commands = new (string direction, int steps)[] {("S", 3)};
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)> {(2, -3), (2, -4), (2, -5), (2, -6)};
+            var expected = new List<Position>
+            {
+                new Position(2, -3), 
+                new Position(2, -4), 
+                new Position(2, -5), 
+                new Position(2, -6)
+            };
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }
@@ -82,7 +106,7 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldCleanManyTimesOnASingleDirection()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var commands = new (string direction, int steps)[]
             {
                 ("E", 2),
@@ -92,11 +116,11 @@ namespace RobotCleaner.UnitTests.Domain
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)>
+            var expected = new List<Position>
             {
-                (2, -3), (3, -3), (4, -3),
-                (5, -3), (6, -3), (7, -3),
-                (8, -3)
+                new Position(2, -3), new Position(3, -3), new Position(4, -3),
+                new Position(5, -3), new Position(6, -3), new Position(7, -3),
+                new Position(8, -3)
             };
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
@@ -106,23 +130,23 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldCleanManyTimesOnManyDirections()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var commands = new (string direction, int steps)[]
             {
                 ("E", 2),
                 ("N", 3),
                 ("W", 2),
-                ("S", 1),
+                ("S", 1)
             };
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)>
+            var expected = new List<Position>
             {
-                (2, -3), (3, -3), (4, -3),
-                (4, -2), (4, -1), (4, 0),
-                (3, 0), (2, 0),
-                (2, -1)
+                new Position(2, -3), new Position(3, -3), new Position(4, -3),
+                new Position(4, -2), new Position(4, -1), new Position(4, 0),
+                new Position(3, 0), new Position(2, 0),
+                new Position(2, -1)
             };
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
@@ -132,7 +156,7 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldCleanUniqueSpaces()
         {
             const int spaceSize = 10;
-            var startingPosition = (2, -3);
+            var startingPosition = new Position(2, -3);
             var normalCommands = new (string direction, int steps)[]
             {
                 ("E", 2),
@@ -153,12 +177,12 @@ namespace RobotCleaner.UnitTests.Domain
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)>
+            var expected = new List<Position>
             {
-                (2, -3), (3, -3), (4, -3),
-                (4, -2), (4, -1), (4, 0),
-                (3, 0), (2, 0),
-                (2, -1)
+                new Position(2, -3), new Position(3, -3), new Position(4, -3),
+                new Position(4, -2), new Position(4, -1), new Position(4, 0),
+                new Position(3, 0), new Position(2, 0),
+                new Position(2, -1)
             };
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
@@ -168,7 +192,7 @@ namespace RobotCleaner.UnitTests.Domain
         public void ShouldNotCleanOutsideSpace()
         {
             const int spaceSize = 2;
-            var startingPosition = (-2, 2);
+            var startingPosition = new Position(-2, 2);
             var commands = new (string direction, int steps)[]
             {
                 ("E", 5),
@@ -179,13 +203,42 @@ namespace RobotCleaner.UnitTests.Domain
 
             var cleanedSpaces = new Robot(spaceSize, startingPosition, commands).Clean();
 
-            var expected = new List<(int x, int y)>
+            var eastPositions = new List<Position>
             {
-                (-2, 2), (-1, 2), (0, 2), (1, 2), (2, 2),
-                (2, 1), (2, 0), (2, -1), (2, -2),
-                (1, -2), (0, -2), (-1, -2), (-2, -2),
-                (-2, -1), (-2, 0), (-2, 1)
+                new Position(-2, 2),
+                new Position(-1, 2),
+                new Position(0, 2),
+                new Position(1, 2),
+                new Position(2, 2)
             };
+            
+            var southPositions = new List<Position>
+            {
+                new Position(2, 1), 
+                new Position(2, 0), 
+                new Position(2, -1), 
+                new Position(2, -2)
+            };
+
+            var westPositions = new List<Position>
+            {
+                new Position(1, -2),
+                new Position(0, -2),
+                new Position(-1, -2),
+                new Position(-2, -2)
+            };
+
+            var northPositions = new List<Position>
+            {
+                new Position(-2, -1), 
+                new Position(-2, 0), 
+                new Position(-2, 1)
+            };
+
+            var expected = eastPositions
+                .Concat(southPositions)
+                .Concat(westPositions)
+                .Concat(northPositions);
 
             cleanedSpaces.Should().BeEquivalentTo(expected);
         }

@@ -5,18 +5,18 @@ namespace RobotCleaner.App.Domain
 {
     public readonly struct CommandResult
     {
-        public (int x, int y) LastPosition { get; }
-        public IReadOnlyCollection<(int x, int y)> Positions { get; }
+        public Position LastPosition { get; }
+        public IReadOnlyCollection<Position> Positions { get; }
 
-        public CommandResult((int x, int y) lastPosition, 
-            IEnumerable<(int x, int y)> positions)
+        public CommandResult(Position lastPosition, 
+            IEnumerable<Position> positions)
         {
             LastPosition = lastPosition;
             Positions = positions.ToList();
         }
 
-        public void Deconstruct(out (int x, int y) lastPosition,
-            out IReadOnlyCollection<(int x, int y)> positions)
+        public void Deconstruct(out Position lastPosition,
+            out IReadOnlyCollection<Position> positions)
         {
             lastPosition = LastPosition;
             positions = Positions;
