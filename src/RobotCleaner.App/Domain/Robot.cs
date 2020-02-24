@@ -15,7 +15,7 @@ namespace RobotCleaner.App.Domain
         }
 
         private readonly int _spaceSize;
-        private (int x, int y) _position; 
+        private (int x, int y) _position;
         private readonly IEnumerable<(string direction, int steps)> _commands;
 
         public IEnumerable<(int x, int y)> Clean()
